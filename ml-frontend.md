@@ -1,7 +1,6 @@
 ---
-toc: true
-comments: false
 layout: base
+title: Prediction
 permalink: /mlproject
 ---
 <html>
@@ -92,6 +91,14 @@ function makePrediction() {
 var gpa = document.getElementById("gpa").value;
 var sat = document.getElementById("sat").value;
 var extracurriculars = document.getElementById("extracurriculars").value;
+if (sat > 1600) {
+alert("SAT score cannot exceed 1600");
+return;
+}
+if (gpa > 5) {
+alert("GPA cannot exceed 5");
+return;
+}
 var data = {
 gpa: gpa,
 SAT: sat,
@@ -104,7 +111,12 @@ headers: {
 },
 body: JSON.stringify(data)
 })
-.then(response => response.json())
+.then(response => {
+if (!response.ok) {
+throw new Error('Prediction request failed: ' + response.statusText);
+}
+return response.json();
+})
 .then(result => {
 // Display prediction result below the title
 var predictionResultElement = document.getElementById("predictionResult");
@@ -118,6 +130,7 @@ predictionResultElement.style.color = "red";
 predictionResultElement.textContent = result.prediction;
 })
 .catch(error => {
+alert('Prediction error: ' + error.message); 
 console.error('Error:', error);
 });
 }
