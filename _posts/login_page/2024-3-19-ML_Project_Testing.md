@@ -73,30 +73,35 @@ permalink: /mlproject
       <input type="number" id="extracurriculars" name="extracurriculars" placeholder="Extracurriculars">
     </div>
     <br>
-    <button class="btn" id="checkCompatibility">Check</button>
+    <button class="btn" id="checkCompatibility">Check</button> 
   </div>
 </center>
 <script>
-document.getElementById('checkCompatibility').addEventListener('click', function() {
-  const satScore = document.getElementById('sat').value;
-  const gpa = document.getElementById('gpa').value;
-  const extracurriculars = document.getElementById('extracurriculars').value;
-  const formData = new FormData();
-  formData.append('SAT', satScore);
-  formData.append('gpa', gpa);
-  formData.append('Extracurricular_Activities', extracurriculars);
-  fetch('http://127.0.0.1:5000/api/Prediction', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    alert(`Compatibility checked! Response: ${JSON.stringify(data)}`);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-});
+    function makePrediction() {
+        var gpa = document.getElementById("gpa").value;
+        var sat = document.getElementById("sat").value;
+        var extracurriculars = document.getElementById("extracurriculars").value;
+        var data = {
+            gpa: gpa,
+            SAT: sat,
+            Extracurricular_Activities: extracurriculars
+        };
+        fetch('http://127.0.0.1:8086/api/users/Prediction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            alert("Prediction Result: " + JSON.stringify(result));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    document.getElementById("checkCompatibility").addEventListener("click", makePrediction);
 </script>
 </body>
 </html>
