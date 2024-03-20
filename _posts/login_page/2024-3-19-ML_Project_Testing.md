@@ -15,21 +15,30 @@ font-family: 'Poppins', sans-serif;
 text-align: center;
 color: #333;
 animation: bounce 1s infinite alternate;
-font-size: 40px; 
+font-size: 40px;
+}
+p#predictionResult {
+text-align: center;
+font-size: 36px;
+margin-top: 20px;
 }
 @keyframes bounce {
-0% { transform: translateY(0); }
-100% { transform: translateY(-20px); }
+0% {
+transform: translateY(0);
+}
+100% {
+transform: translateY(-20px);
+}
 }
 .container {
 width: 50%;
-margin: 0 auto; 
+margin: 0 auto;
 text-align: center;
 }
 .input-box {
 display: inline-block;
-margin-bottom: 30px; 
-margin-right: 20px; 
+margin-bottom: 30px;
+margin-right: 20px;
 }
 .input-box label {
 display: block;
@@ -59,21 +68,23 @@ background-color: #45a049;
 <body>
 <center>
 <h1>Admission Predictor</h1>
+<!-- Prediction result element -->
+<p id="predictionResult"></p>
 <div class="container">
 <div class="input-box">
-  <label for="sat">SAT Score:</label><br>
-  <input type="number" id="sat" name="sat" placeholder="SAT score">
+<label for="sat">SAT Score:</label><br>
+<input type="number" id="sat" name="sat" placeholder="SAT score">
 </div>
 <div class="input-box">
-  <label for="gpa">GPA:</label><br>
-  <input type="number" step="0.01" id="gpa" name="gpa" placeholder="GPA">
+<label for="gpa">GPA:</label><br>
+<input type="number" step="0.01" id="gpa" name="gpa" placeholder="GPA">
 </div>
 <div class="input-box">
-  <label for="extracurriculars">Extracurriculars:</label><br>
-  <input type="number" id="extracurriculars" name="extracurriculars" placeholder="Extracurriculars">
+<label for="extracurriculars">Extracurriculars:</label><br>
+<input type="number" id="extracurriculars" name="extracurriculars" placeholder="Extracurriculars">
 </div>
 <br>
-<button class="btn" id="checkCompatibility">Check</button> 
+<button class="btn" id="checkCompatibility">Check</button>
 </div>
 </center>
 <script>
@@ -89,13 +100,22 @@ Extracurricular_Activities: extracurriculars
 fetch('http://127.0.0.1:8086/api/users/Prediction', {
 method: 'POST',
 headers: {
-  'Content-Type': 'application/json'
+'Content-Type': 'application/json'
 },
 body: JSON.stringify(data)
 })
 .then(response => response.json())
 .then(result => {
-alert("Prediction Result: " + JSON.stringify(result));
+// Display prediction result below the title
+var predictionResultElement = document.getElementById("predictionResult");
+if (result.prediction === "Accepted") {
+predictionResultElement.style.color = "green";
+} else if (result.prediction === "Waitlisted") {
+predictionResultElement.style.color = "yellow";
+} else if (result.prediction === "Rejected") {
+predictionResultElement.style.color = "red";
+}
+predictionResultElement.textContent = result.prediction;
 })
 .catch(error => {
 console.error('Error:', error);
