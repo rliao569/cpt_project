@@ -7,67 +7,77 @@ permalink: /mlproject
 <head>
 <style>
 body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-family: 'Poppins', sans-serif;
+background-color: #f4f4f4;
+color: #333;
+line-height: 1.6;
 }
 h1 {
-font-family: 'Poppins', sans-serif;
 text-align: center;
-color: #333;
+font-size: 48px;
+margin-bottom: 30px;
+color: #2c3e50;
 animation: bounce 1s infinite alternate;
-font-size: 40px;
-}
-p#predictionResult {
-text-align: center;
-font-size: 36px;
-margin-top: 20px;
 }
 @keyframes bounce {
 0% {
 transform: translateY(0);
 }
 100% {
-transform: translateY(-20px);
+transform: translateY(-30px);
 }
+}
+p#predictionResult {
+text-align: center;
+font-size: 50px;
+margin-top: 20px;
 }
 .container {
 width: 50%;
 margin: 0 auto;
-text-align: center;
 }
 .input-box {
 display: inline-block;
-margin-bottom: 30px;
-margin-right: 20px;
+margin-bottom: 20px;
+text-align: center;
 }
 .input-box label {
 display: block;
 margin-bottom: 5px;
+font-size: 18px;
+color: #2c3e50;
 }
 .input-box input {
-width: 200px;
+width: 250px;
 padding: 10px;
-border: 1px solid #ccc;
-border-radius: 5px;
+border: 2px solid #3498db;
+border-radius: 10px;
 font-size: 16px;
+transition: border-color 0.3s;
+}
+.input-box input:focus {
+outline: none;
+border-color: #2980b9;
 }
 .btn {
-background-color: #4CAF50;
-color: white;
+display: inline-block;
+background-color: #27ae60;
+color: #fff;
 padding: 10px 20px;
 border: none;
 border-radius: 5px;
 cursor: pointer;
 font-size: 16px;
+transition: background-color 0.3s;
 }
 .btn:hover {
-background-color: #45a049;
+background-color: #219652;
 }
 </style>
 </head>
 <body>
 <center>
 <h1>Admission Predictor</h1>
-<!-- Prediction result element -->
 <p id="predictionResult"></p>
 <div class="container">
 <div class="input-box">
@@ -80,7 +90,7 @@ background-color: #45a049;
 </div>
 <div class="input-box">
 <label for="extracurriculars">Extracurriculars:</label><br>
-<input type="number" id="extracurriculars" name="extracurriculars" placeholder="Extracurriculars">
+<input type="number" id="Extracurricular_Activities" name="Extracurricular_Activities" placeholder="Extracurriculars">
 </div>
 <br>
 <button class="btn" id="checkCompatibility">Check</button>
@@ -90,7 +100,7 @@ background-color: #45a049;
 function makePrediction() {
 var gpa = document.getElementById("gpa").value;
 var sat = document.getElementById("sat").value;
-var extracurriculars = document.getElementById("extracurriculars").value;
+var extracurriculars = document.getElementById("Extracurricular_Activities").value;
 if (sat > 1600) {
 alert("SAT score cannot exceed 1600");
 return;
@@ -107,31 +117,31 @@ Extracurricular_Activities: extracurriculars
 fetch('http://127.0.0.1:8086/api/users/Prediction', {
 method: 'POST',
 headers: {
-'Content-Type': 'application/json'
+'Content-Type': 'application/json' 
 },
 body: JSON.stringify(data)
 })
 .then(response => {
 if (!response.ok) {
-throw new Error('Prediction request failed: ' + response.statusText);
+throw new Error('Network response was not ok');
 }
 return response.json();
 })
 .then(result => {
-// Display prediction result below the title
 var predictionResultElement = document.getElementById("predictionResult");
-if (result.prediction === "Accepted") {
+if (result === "Accepted") {
 predictionResultElement.style.color = "green";
-} else if (result.prediction === "Waitlisted") {
+} else if (result === "Waitlisted") {
 predictionResultElement.style.color = "yellow";
-} else if (result.prediction === "Rejected") {
+} else if (result === "Rejected") {
 predictionResultElement.style.color = "red";
 }
-predictionResultElement.textContent = result.prediction;
+predictionResultElement.textContent = result;
+alert("Prediction successful: " + result); 
 })
 .catch(error => {
-alert('Prediction error: ' + error.message); 
 console.error('Error:', error);
+alert("Prediction request failed: " + error.message); 
 });
 }
 document.getElementById("checkCompatibility").addEventListener("click", makePrediction);
