@@ -87,7 +87,7 @@
 </head>
 <body>
 <center>
-<h1>Admission Predictor</h1>
+<h1>Admission Predictor for MIT</h1>
 <p id="predictionResult"></p>
 <div class="container">
 <div class="input-box">
