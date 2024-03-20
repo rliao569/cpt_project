@@ -71,7 +71,6 @@
         .confetti {
             width: 10px;
             height: 10px;
-            background-color: #f39c12;
             position: absolute;
             top: 0;
             animation: confetti-fall linear 4s infinite;
@@ -162,8 +161,17 @@ function createConfetti() {
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * window.innerWidth + 'px';
         confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.backgroundColor = getRandomColor();
         document.body.appendChild(confetti);
     }
+}
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 document.getElementById("checkCompatibility").addEventListener("click", makePrediction);
 </script>
